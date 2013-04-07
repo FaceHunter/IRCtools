@@ -6,4 +6,9 @@ Some IRC tools including:
 * Some nice utils
 * Cake
 
+
+Credits
+========
+* BlackGuard26, mental support and future testing
+
 IRCtools for IRC
