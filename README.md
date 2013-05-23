@@ -1,3 +1,6 @@
+STILL IN ALPHA (wich means a small part is done and a lot of errors :))
+
+
 IRCtools
 ========
 Some IRC tools including:
