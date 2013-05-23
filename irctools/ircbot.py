@@ -1,5 +1,7 @@
 import socket
 from threading import Thread
+from defines import *
+
 
 class notSetError(Exception):
 	pass
@@ -10,12 +12,11 @@ class dafuq(Exception):
 class bot:
 	debug = False
 	enableConsoleInput = False
-	nick = None
 	channel = None
-	def __init__(self, server, port=6667, passwd = None)
+	prefix = "!"
+	def __init__(self, server, port=6667, passwd = None):
 		print "starting bot"
-		self.commandList = {}
-		self.debug = False
+		self.commandList = {"PRIVMSG":{},"NOTICE":{}}
 		self.serverIsSet = False
 		self.port = port
 		self.server = server
@@ -25,27 +26,59 @@ class bot:
 		if self.nick == None:
 			raise notSetError, "You have to set a nick"
 			
-			
 	def onStartup(self):
-		"""all yo niggerdix should register stuffs here"""
+		pass
+			
+	def registerCommand(self,command,function, scope=""):
+		scope = scope.capitalize()
+		if scope == "":
+			
+			self.commandList["PRIVMSG"][command] = function
+			self.commandList["NOTICE"][command] = function
+		elif scope is not "PRIVMSG" or scope is not "NOTICE":
+			raise dafuq("Invalid scope when registering command")
+		else:
+			self.commandList[scope][command] = function
+				
+		print "[DEBUG]registered command "+self.prefix+command
+		
+	def getPrivmsgInfo(self, text):
+		info = {}
+		#>> :FaceHunter_!~FaceHunte@124DE4BB.C03EAC25.3A3F4334.IP PRIVMSG #FaceHunter :!lolcakes test test test
+		info["command"] = text.split(PRE)[2].split()[0]
+		info["user"] = {}
+		info["user"]["nick"] = text.split(PRE)[1].split("!")[0]
+		info["user"]["realname"] = text.split(PRE)[1].split("!")[1].split("@")[0]
+		info["user"]["hostmask"] = text.split(PRE)[1].split()[0].split("@")[1]
+		info["args"] = []
+		try:
+			print str(text.split(info["command"])[1].split("\r\n")[0].split())
+			for arg in text.split(info["command"])[1].split("\r\n")[0].split():
+				print "adding arg "+arg
+				info["args"].append(arg)
+		except IndexError:
+			info["args"] = None
+		info["channel"] = text.split()[2]
+		return info
 		
 	def joinChan(self,channel):
 		self.sock.send("JOIN "+channel+"\n")
-			
-	def identText(self, text):
-		channel = "#"+text.split("#")[1].split()[0]
-		nick = text.split('!')[0].strip(':')
-		command = text.split(":")[2].split()[0]
-		args = text.split(command)[1].split("\r\n")[0].split()
-		return channel, nick, command, args
+		
+	def sendTo(self,channel,text):
+		self.sock.send("PRIVMSG "+channel+" :"+text+"\r\n")
+		
+	def funcExec(self,function, args):
+		function(args)
 		
 	def Connection(self):
+		self.onStartup()
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.sock.connect((self.server,self.port))
 		if self.passwd:
 			self.sock.send("PASS "+self.passwd+"\n")
 		self.sock.send("NICK "+self.nick+"\n")
 		self.sock.send("USER "+self.nick+" "+self.nick+" "+self.nick+" "+self.nick+"\n")
+		self.motd = False
 		
 		if type(self.channel).__name__ == 'str':
 			self.joinChan(self.channel)
@@ -56,18 +89,37 @@ class bot:
 			raise dafuq("yo dawg what are you doing? it should be str or list")
 		
 		while 1:
-			text = self.sock.recv(1024)
-			if self.debug:
-				print text
-			if "PRIVMSG" in text:
-				channel, nick, command, args = self.identText(text)
-				if command in self.commandList:
-					func = self.commandList[command]
-					function = Thread(target=self.func, args = () )
-					function.start()
+			text = self.sock.recv(2048)
+			text=text.split("\r\n")
+			for line in text:
+				if not line.startswith(":"): #==rubbish
+					continue
+
+				if self.debug == True:
+					print line
+					
+				try:
+					serveraction = line.split()[1]
+				except:
+					print "error "+line
+					
+				if serveraction == PRIVMSG:
+					print "[DEBUG] Server action PRIVMSG"
+			# if "PRIVMSG" in text and not text.startswith(":irc."):
+					if line.split(PRE)[2].startswith(self.prefix):
+						print "[DEBUG] Possible command"
+						info = self.getPrivmsgInfo(line)
+						if info["command"].strip(self.prefix) in self.commandList["PRIVMSG"]:
+							func = self.commandList["PRIVMSG"][info["command"].strip(self.prefix)]
+							print "[DEBUG] Found command %s, executing function %s" % (info["command"].strip(self.prefix), func.__name__)
+							function = Thread(target=self.funcExec, args = (func,info) )
+							function.start()
+						else:
+							print "[DEBUG] Command %s not in list!" % info["command"]
+							print str(self.commandList["PRIVMSG"])
 		
 	def connect(self):
 		if not self.server:
-			raise notSetError( "You must set execute this command with an valid IRC server" )
+			raise notSetError( "You must execute this command with a valid IRC server" )
 		self.conn = Thread(target=self.Connection)
 		self.conn.start()

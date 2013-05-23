@@ -1,0 +1,17 @@
+PRE = ":"
+NOTICE = "NOTICE"
+PRIVMSG = "PRIVMSG"
+CAP = "CAP" #Don't know what this is for yet
+NICK_ALREADY_IN_USE = "433" #>> :irc.siglost.com 433 * FaceHunter :Nickname is already in use.
+WELCOME = "001"
+MOTD = "372"
+EOMOTD = "376"
+MODE = "MODE"
+PING = "PING"
+PONG = "PONG"
+JOIN = "JOIN"
+TOPIC = "332"
+TOPIC_CREATION = "333"
+NAMES = "353"
+EONAMES = 366
+PART = "PART"
