@@ -10,5 +10,6 @@ Some IRC tools including:
 Credits
 ========
 * BlackGuard26, mental support and future testing
+* Avail, whining about it so i had to do it
 
 IRCtools for IRC
