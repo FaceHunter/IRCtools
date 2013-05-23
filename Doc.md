@@ -1,0 +1,2 @@
+IRC bot documantation
+=============
