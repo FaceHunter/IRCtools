@@ -86,7 +86,7 @@ class bot:
 			self.joinChan(self.channel)
 		elif type(self.channel).__name__ == 'list':
 			for x in self.channel:
-				self.joinchan(x)
+				self.joinChan(x)
 		else:
 			raise dafuq("yo dawg what are you doing? it should be str or list")
 		
