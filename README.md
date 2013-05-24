@@ -13,6 +13,6 @@ Some IRC tools including:
 Credits
 ========
 * BlackGuard26, mental support and future testing
-* Avail, whining about it so i had to do it
+* Avail, debug, being a nab so i can test if it's nab-proof
 
 IRCtools for IRC
