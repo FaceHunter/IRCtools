@@ -30,13 +30,12 @@ class bot:
 		pass
 			
 	def registerCommand(self,command,function, scope=""):
-		scope = scope.capitalize()
 		if scope == "":
 			
 			self.commandList["PRIVMSG"][command] = function
 			self.commandList["NOTICE"][command] = function
-		elif scope is not "PRIVMSG" or scope is not "NOTICE":
-			raise dafuq("Invalid scope when registering command")
+		elif scope is not "PRIVMSG" and scope is not "NOTICE":
+			raise dafuq("Invalid scope when registering command ("+scope+")")
 		else:
 			self.commandList[scope][command] = function
 				
