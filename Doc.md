@@ -39,7 +39,7 @@ Now with that done we can start creating our function!
     def ping(self, info): #as we registered that at self.registerCommand()
         nick = info["user"]["nick"] #Gets the nick from the info dict
         channel = info["channel"] #Gets the channel from the info dict
-        self.sendTo(channel, "pong "+' '.join(info["args"]) #returns all given args
+        self.sendTo(channel, "pong "+' '.join(info["args"])) #returns all given args
         
 <b>The info object:<b/>
 
@@ -74,4 +74,4 @@ The complete script:
         def ping(self, info): #as we registered that at self.registerCommand()
             nick = info["user"]["nick"] #Gets the nick from the info dict
             channel = info["channel"] #Gets the channel from the info dict
-            self.sendTo(channel, "pong "+' '.join(info["args"]) #returns all given args
+            self.sendTo(channel, "pong "+' '.join(info["args"])) #returns all given args
