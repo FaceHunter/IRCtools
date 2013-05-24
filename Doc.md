@@ -69,7 +69,7 @@ The complete script:
         channel = "#MyChannel" #or ["#MyFirstChannel","MyOtherChannel"]
         
         def onStartup():
-            self.registercommand("ping", self.ping, PRIVMSG)
+            self.registerCommand("ping", self.ping, PRIVMSG)
             
         def ping(self, info): #as we registered that at self.registerCommand()
             nick = info["user"]["nick"] #Gets the nick from the info dict
