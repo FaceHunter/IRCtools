@@ -50,7 +50,7 @@ Now with that done we can start creating our function!
             {
             'nick': '', #The nickname of the user executing the command
             'realname': '', #The real name of the user executing the command
-            'hostmask': 'do.you.even.dot' #The hostmask of the user executing the command
+            'hostmask': '' #The hostmask of the user executing the command
             }, 
         'channel': '' #channel in wich the command is executed
     }
