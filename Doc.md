@@ -58,3 +58,20 @@ Now with that done we can start creating our function!
 Finally at the bottom of the script we have to start everything
 
     MyBot("irc.rizon.net",6667)
+
+
+The complete script:
+
+    from irctools import ircbot
+    
+    class MyBot(ircbot.bot):
+        nick = "MyBot"
+        channel = "#MyChannel" #or ["#MyFirstChannel","MyOtherChannel"]
+        
+        def onStartup():
+            self.registercommand("ping", self.ping, PRIVMSG)
+            
+        def ping(self, info): #as we registered that at self.registerCommand()
+            nick = info["user"]["nick"] #Gets the nick from the info dict
+            channel = info["channel"] #Gets the channel from the info dict
+            self.sendTo(channel, "pong "+' '.join(info["args"]) #returns all given args
