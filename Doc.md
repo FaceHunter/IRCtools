@@ -6,9 +6,11 @@ Creating a bot wich pongs on command
 
 <b>Make sure you installed everything correctly</b>
 
-start by importing the module
+start by importing the modules
 
     from irctools import ircbot
+	from defines import *
+	
 
 Create a class with any name
 
