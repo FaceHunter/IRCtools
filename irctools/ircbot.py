@@ -40,7 +40,7 @@ class bot:
 		else:
 			self.commandList[scope][command] = function
 				
-		print "[DEBUG]registered command "+self.prefix+command
+		print "[DEBUG] Registered command "+self.prefix+command
 		
 	def getPrivmsgInfo(self, text):
 		info = {}
@@ -67,6 +67,9 @@ class bot:
 	def sendTo(self,channel,text):
 		self.sock.send("PRIVMSG "+channel+" :"+text+"\r\n")
 		
+	def noticeTo(self,nick,text):
+		self.sock.send("NOTICE "+nick+" :"+text+"\r\n")
+		
 	def funcExec(self,function, args):
 		function(args)
 		
@@ -92,6 +95,9 @@ class bot:
 			text = self.sock.recv(2048)
 			text=text.split("\r\n")
 			for line in text:
+				if line.startswith("PING"):
+					sub = line.split("PING ")[1]
+					self.sock.send("PONG "+sub)
 				if not line.startswith(":"): #==rubbish
 					continue
 
@@ -104,10 +110,8 @@ class bot:
 					print "error "+line
 					
 				if serveraction == PRIVMSG:
-					print "[DEBUG] Server action PRIVMSG"
 			# if "PRIVMSG" in text and not text.startswith(":irc."):
 					if line.split(PRE)[2].startswith(self.prefix):
-						print "[DEBUG] Possible command"
 						info = self.getPrivmsgInfo(line)
 						if info["command"].strip(self.prefix) in self.commandList["PRIVMSG"]:
 							func = self.commandList["PRIVMSG"][info["command"].strip(self.prefix)]

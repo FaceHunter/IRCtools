@@ -2,7 +2,7 @@ from irctools import ircbot
 
 class bot(ircbot.bot):
 	nick = "Jesen"
-	debug = False
+	debug = True
 	channel = "#FaceHunter"
 	
 	def lolcakes(self, info):
