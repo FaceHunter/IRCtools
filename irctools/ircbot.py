@@ -3,7 +3,7 @@ from threading import Thread
 from defines import *
 import updater
 
-__version__ = "0.0.0.1"
+__version__ = "0.0.1.0"
 
 updater.check(__version__)
 
