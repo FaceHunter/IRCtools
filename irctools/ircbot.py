@@ -1,7 +1,11 @@
 import socket
 from threading import Thread
 from defines import *
+import updater
 
+__version__ = "0.0.0.1"
+
+updater.check(__version__)
 
 class notSetError(Exception):
 	pass

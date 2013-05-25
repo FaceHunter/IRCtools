@@ -1,4 +1,5 @@
 from irctools import ircbot
+from irctools.defines import *
 
 class bot(ircbot.bot):
 	nick = "Jesen"
@@ -11,6 +12,6 @@ class bot(ircbot.bot):
 		self.sendTo(info["channel"],str(info))
 		
 	def onStartup(self):
-		self.registerCommand("test", self.lolcakes)
+		self.registerCommand("test", self.lolcakes, PRIVMSG)
 	
 bot("irc.rizon.net")
